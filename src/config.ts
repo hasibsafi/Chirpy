@@ -25,6 +25,8 @@ export const config = {
     fileServerHits: 0,
     dbURL: process.env.DB_URL || "",
     platform: process.env.PLATFORM || "prod",
+    jwtSecret: process.env.JWT_SECRET || "",
+    polkaKey: process.env.POLKA_KEY || "",
   },
   db: {
     dbURL: process.env.DB_URL || "",
