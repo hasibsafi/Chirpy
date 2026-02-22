@@ -1,6 +1,6 @@
-import { db } from "../index.js";
-import { NewUser, users } from "../schema.js";
-import { eq } from "drizzle-orm";
+import { db } from '../index.js';
+import { NewUser, users } from '../schema.js';
+import { eq } from 'drizzle-orm';
 
 // create user
 
@@ -23,7 +23,10 @@ export async function deleteAllUsers() {
 }
 
 // update user
-export async function updateUser(userId: string, data: { email?: string; hashedPassword?: string }) {
+export async function updateUser(
+  userId: string,
+  data: { email?: string; hashedPassword?: string }
+) {
   const [result] = await db
     .update(users)
     .set(data)
@@ -40,4 +43,9 @@ export async function upgradeUserToChirpyRed(userId: string) {
     .where(eq(users.id, userId))
     .returning();
   return result;
+}
+// get user by id
+export async function getUserById(id: string) {
+  const [user] = await db.select().from(users).where(eq(users.id, id));
+  return user;
 }

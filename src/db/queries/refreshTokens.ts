@@ -1,9 +1,13 @@
-import { db } from "../index.js";
-import { refreshTokens , users} from "../schema.js";
-import { eq } from "drizzle-orm";
+import { db } from '../index.js';
+import { refreshTokens, users } from '../schema.js';
+import { eq } from 'drizzle-orm';
 
 // create refresh token
-export async function createRefreshToken(token: string, userId: string, expiresAt: Date) {
+export async function createRefreshToken(
+  token: string,
+  userId: string,
+  expiresAt: Date
+) {
   const [result] = await db
     .insert(refreshTokens)
     .values({ token, userId, expiresAt })
@@ -34,17 +38,17 @@ export async function revokeRefreshToken(token: string) {
 
 // get user from refresh token
 export async function getUserFromRefreshToken(token: string) {
-    const [result] = await db
-      .select({
-        id: users.id,
-        email: users.email,
-        createdAt: users.createdAt,
-        updatedAt: users.updatedAt,
-        expiresAt: refreshTokens.expiresAt,
-        revokedAt: refreshTokens.revokedAt,
-      })
-      .from(refreshTokens)
-      .innerJoin(users, eq(refreshTokens.userId, users.id))
-      .where(eq(refreshTokens.token, token));
-    return result;
-  }
+  const [result] = await db
+    .select({
+      id: users.id,
+      email: users.email,
+      createdAt: users.createdAt,
+      updatedAt: users.updatedAt,
+      expiresAt: refreshTokens.expiresAt,
+      revokedAt: refreshTokens.revokedAt,
+    })
+    .from(refreshTokens)
+    .innerJoin(users, eq(refreshTokens.userId, users.id))
+    .where(eq(refreshTokens.token, token));
+  return result;
+}
